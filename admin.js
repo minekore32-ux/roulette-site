@@ -20,7 +20,7 @@ function openAdmin(){
             <h3>${roulette.name}</h3>
 
             <button onclick="openEdit(${index})">
-                邱ｨ髮・
+                編集
             </button>
         `;
 
@@ -40,7 +40,7 @@ function openEdit(index){
     document.getElementById("editPanel").style.display="block";
 
     document.getElementById("editTitle").textContent =
-    roulettes[index].name + " 邱ｨ髮・;
+    roulettes[index].name + " 編集";
 
     showItems();
 
@@ -60,7 +60,7 @@ function showItems(){
         div.innerHTML=`
         ${item}
         <button onclick="deleteItem(${index})">
-        蜑企勁
+        削除
         </button>
         `;
 
@@ -97,8 +97,8 @@ document.getElementById("addItemButton").onclick = function(){
 document.getElementById("addRouletteAdmin").onclick = function(){
     const number = roulettes.length + 1;
     roulettes.push({
-        name: "繝ｫ繝ｼ繝ｬ繝・ヨ" + number,
-        items: ["鬆・岼1", "鬆・岼2"],
+        name: "ルーレット" + number,
+        items: ["項目1", "項目2"],
         enabled: true
     });
     openAdmin();
