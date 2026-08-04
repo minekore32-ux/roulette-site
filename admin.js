@@ -1,6 +1,6 @@
-// 管理画面用
+﻿// 邂｡逅・判髱｢逕ｨ
 
-// 管理画面
+// 邂｡逅・判髱｢
 
 function openAdmin(){
 
@@ -20,7 +20,7 @@ function openAdmin(){
             <h3>${roulette.name}</h3>
 
             <button onclick="openEdit(${index})">
-                編集
+                邱ｨ髮・
             </button>
         `;
 
@@ -40,7 +40,7 @@ function openEdit(index){
     document.getElementById("editPanel").style.display="block";
 
     document.getElementById("editTitle").textContent =
-    roulettes[index].name + " 編集";
+    roulettes[index].name + " 邱ｨ髮・;
 
     showItems();
 
@@ -60,7 +60,7 @@ function showItems(){
         div.innerHTML=`
         ${item}
         <button onclick="deleteItem(${index})">
-        削除
+        蜑企勁
         </button>
         `;
 
@@ -97,8 +97,8 @@ document.getElementById("addItemButton").onclick = function(){
 document.getElementById("addRouletteAdmin").onclick = function(){
     const number = roulettes.length + 1;
     roulettes.push({
-        name: "ルーレット" + number,
-        items: ["項目1", "項目2"],
+        name: "繝ｫ繝ｼ繝ｬ繝・ヨ" + number,
+        items: ["鬆・岼1", "鬆・岼2"],
         enabled: true
     });
     openAdmin();
@@ -114,12 +114,15 @@ document.getElementById("closeButton").onclick = function(){
     document.getElementById("editPanel").style.display = "none";
 };
 
-document.getElementById("saveButton").onclick = function(){
-
+document.getElementById("saveButton").onclick = async function(){
     saveData();
 
-   
-
-alert("Firebaseに保存しました！");
+    try {
+        await window.saveToFirebase(roulettes);
+        alert("Firebaseに保存しました！");
+    } catch (error) {
+        console.error("Firebase保存エラー", error);
+        alert("Firebaseへの保存に失敗しました。コンソールを確認してください。");
+    }
 
 };
