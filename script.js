@@ -156,5 +156,9 @@ function deleteRoulette(index){
 
 }
 
-loadData();
-createRoulettes();
+async function init(){
+    await loadData();
+    createRoulettes();
+}
+
+init();

@@ -33,6 +33,11 @@ function openAdmin(){
 let editIndex = null;
 
 function openEdit(index){
+    const roulette = roulettes[index];
+    if(!roulette){
+        console.error("openEdit: invalid index", index);
+        return;
+    }
 
     editIndex = index;
 
@@ -50,10 +55,14 @@ function openEdit(index){
 function showItems(){
 
     const list = document.getElementById("itemList");
-
     list.innerHTML="";
 
-    roulettes[editIndex].items.forEach((item,index)=>{
+    const roulette = roulettes[editIndex];
+    if(!roulette || !Array.isArray(roulette.items)){
+        return;
+    }
+
+    roulette.items.forEach((item,index)=>{
 
         const div=document.createElement("div");
 
@@ -78,18 +87,21 @@ function deleteItem(index){
 }
 document.getElementById("addItemButton").onclick = function(){
 
-    const input = document.getElementById("newItem");
+    const roulette = roulettes[editIndex];
+    if(!roulette || !Array.isArray(roulette.items)){
+        alert("編集するルーレットを選択してください。");
+        return;
+    }
 
+    const input = document.getElementById("newItem");
     const value = input.value.trim();
 
     if(value === ""){
         return;
     }
 
-    roulettes[editIndex].items.push(value);
-
+    roulette.items.push(value);
     input.value = "";
-
     showItems();
 
 };
