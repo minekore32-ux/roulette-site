@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ルーレット</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>ルーレット</h1>
+<div id="adminArea">
+    <button id="adminButton">⚙ 管理者</button>
+</div>
+<div id="roulette-container">
+</div>
+
+<button id="addRoulette">＋ルーレット追加</button>
+<button id="spinButton">一斉に決定</button>
+<div id="adminPanel" style="display:none; margin-top:30px;">
+    <h2>管理画面</h2>
+
+    <button id="addRouletteAdmin">
+        ＋ルーレット追加
+    </button>
+
+    <div id="adminList"></div>
+</div>
+<div id="editPanel" style="display:none; margin-top:20px;">
+    <h2 id="editTitle">編集</h2>
+<button id="backAdmin">
+    ← 管理画面に戻る
+</button>
+
+    <div id="itemList"></div>
+
+    <input
+        type="text"
+        id="newItem"
+        placeholder="新しい項目">
+
+    <button id="addItemButton">
+        ＋追加
+    </button>
+
+    <br><br>
+
+    <button id="saveButton">
+        保存
+    </button>
+
+    <button id="closeButton">
+        閉じる
+    </button>
+</div>
+<script type="module" src="firebase.js"></script>
+
+<script src="script.js" defer></script>
+<script src="admin.js" defer></script>
+
+</body>
+</html>
