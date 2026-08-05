@@ -1,4 +1,4 @@
-import { initFirebase, loadRoulette, saveRoulette, onAuthChanged } from './firebase.js';
+import { loadRoulette, saveRoulette } from './firebase.js';
 
 let roulettes = [];
 
