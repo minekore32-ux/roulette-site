@@ -45,8 +45,9 @@ function renderAdminList(){
     }
     roulettes.forEach((r,i)=>{
         const d = document.createElement('div');
-        d.innerHTML = `<hr><h3>${getSafeName(r,i)}</h3><button data-i="${i}">編集</button>`;
-        d.querySelector('button').addEventListener('click', ()=> openEdit(i));
+        d.innerHTML = `<hr><h3>${getSafeName(r,i)}</h3><button data-i="${i}" class="edit-btn">編集</button> <button data-delete="${i}" class="delete-btn">削除</button>`;
+        d.querySelector('[data-i]').addEventListener('click', ()=> openEdit(i));
+        d.querySelector('[data-delete]').addEventListener('click', ()=> deleteRoulette(i));
         adminList.appendChild(d);
     });
 }
@@ -88,6 +89,19 @@ function deleteItem(i){
     roulettes[editIndex].items.splice(i,1);
     setCurrentRoulettes(roulettes);
     renderItems();
+}
+
+function deleteRoulette(index){
+    const roulettes = getCurrentRoulettes();
+    if(!Array.isArray(roulettes) || index < 0 || index >= roulettes.length) return;
+    if(!confirm(`${getSafeName(roulettes[index], index)} を削除してもよろしいですか？`)) return;
+    roulettes.splice(index, 1);
+    setCurrentRoulettes(roulettes);
+    renderAdminList();
+    if(typeof window.createRoulettes === 'function') window.createRoulettes();
+    if(editIndex !== null && editIndex >= roulettes.length) editIndex = null;
+    $('editPanel').style.display = 'none';
+    $('adminPanel').style.display = 'block';
 }
 
 function addItem(){
