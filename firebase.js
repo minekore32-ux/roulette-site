@@ -1,9 +1,9 @@
-console.log("firebase読み込み確認");
-// firebase.js
-// Use CDN ES modules for Firebase and provide simple save/load helpers.
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+// Firebase helper module (ES module)
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getDatabase, ref, set, get, child } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
+// ここに Firebase コンソールから取得した値をコピーします。
 const firebaseConfig = {
     apiKey: "AIzaSyBeRauCQGRoWmktZfLHq-wVCIbD6cl2fnA",
     authDomain: "roulette-master-9acf1.firebaseapp.com",
@@ -14,36 +14,44 @@ const firebaseConfig = {
     appId: "1:582812821409:web:7f5ceecf94ac035214cde0"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+// 管理者アカウントに使うメールをここに入れます。
+const ADMIN_EMAILS = [ 'mineko.re32@gmail.com' ];
 
-export async function saveToFirebase(data){
-    await set(ref(db, "roulette"), data);
+let app, auth, db;
+
+export function initFirebase(){
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getDatabase(app);
 }
 
-export async function loadFirebaseData(){
-    const dbRef = ref(db);
-    const snapshot = await get(child(dbRef, "roulette"));
+export async function signIn(email,password){
+    return await signInWithEmailAndPassword(getAuth(), email, password);
+}
+
+export async function signOutUser(){
+    return await signOut(getAuth());
+}
+
+export function onAuthChanged(cb){
+    return onAuthStateChanged(getAuth(), cb);
+}
+
+export function isAdminUser(user){
+    if(!user) return false;
+    return ADMIN_EMAILS.includes(user.email);
+}
+
+export async function saveRoulette(data){
+    if(!db) db = getDatabase();
+    await set(ref(db, 'roulette'), data);
+}
+
+export async function loadRoulette(){
+    if(!db) db = getDatabase();
+    const snapshot = await get(child(ref(db), 'roulette'));
     if(snapshot.exists()) return snapshot.val();
     return null;
 }
 
-// Expose for legacy usage from non-module scripts
-window.saveToFirebase = saveToFirebase;
-async function loadFromFirebase(){
-
-    const snapshot = await get(ref(db, "roulette"));
-
-    if(snapshot.exists()){
-
-        return snapshot.val();
-
-    }else{
-
-        return null;
-
-    }
-
-}
-
-window.loadFromFirebase = loadFromFirebase;
+export default { initFirebase, signIn, signOutUser, onAuthChanged, saveRoulette, loadRoulette, isAdminUser };

@@ -1,3 +1,9 @@
+body{ font-family: system-ui, Arial; padding:20px; }
+.roulette{ border:1px solid #ddd; padding:10px; margin-bottom:8px; }
+.result{ font-size:18px; font-weight:bold; margin:8px 0; }
+#adminPanel, #editPanel{ border:1px solid #ccc; padding:10px; margin-top:12px; }
+.hidden{ display:none; }
+button{ cursor:pointer; }
 body{
     font-family: sans-serif;
     background:#f4f4f4;

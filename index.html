@@ -10,7 +10,18 @@
 
 <h1>ルーレット</h1>
 <div id="adminArea">
-    <button id="adminButton">⚙ 管理者</button>
+    <div id="authArea">
+        <form id="loginForm">
+            <input id="email" type="email" placeholder="管理者メール" required>
+            <input id="password" type="text" placeholder="パスワード" required>
+            <button type="submit">ログイン</button>
+        </form>
+    </div>
+    <div id="adminControls" style="display:none; margin-top:10px;">
+        <button id="adminButton">⚙ 管理画面を開く</button>
+        <button id="signout" type="button">ログアウト</button>
+    </div>
+    <div id="authStatus" style="margin-top:8px; color:#333;"></div>
 </div>
 <div id="roulette-container">
 </div>
@@ -34,6 +45,9 @@
 
     <div id="itemList"></div>
 
+    <label for="editName">ルーレット名</label>
+    <input id="editName" type="text" placeholder="ルーレット名" style="width:100%; margin-bottom:10px;">
+
     <input
         type="text"
         id="newItem"
@@ -53,10 +67,13 @@
         閉じる
     </button>
 </div>
-<script type="module" src="firebase.js"></script>
-
-<script src="script.js" defer></script>
-<script src="admin.js" defer></script>
+<script type="module">
+    import { initFirebase } from './firebase.js';
+    import { appInit } from './app.js';
+    await initFirebase();
+    await appInit();
+    import('./admin-module.js');
+</script>
 
 </body>
 </html>

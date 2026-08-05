@@ -33,9 +33,11 @@ function openAdmin(){
 let editIndex = null;
 
 function openEdit(index){
+    index = Number(index);
     const roulette = roulettes[index];
     if(!roulette){
         console.error("openEdit: invalid index", index);
+        alert("編集するルーレットが見つかりませんでした。");
         return;
     }
 
@@ -79,10 +81,13 @@ function showItems(){
 
 }
 function deleteItem(index){
+    const roulette = roulettes[editIndex];
+    if(!roulette || !Array.isArray(roulette.items)) return;
 
-    roulettes[editIndex].items.splice(index,1);
+    roulette.items.splice(index,1);
 
     showItems();
+    if(typeof createRoulettes === 'function') createRoulettes();
 
 }
 document.getElementById("addItemButton").onclick = function(){
@@ -103,6 +108,7 @@ document.getElementById("addItemButton").onclick = function(){
     roulette.items.push(value);
     input.value = "";
     showItems();
+    if(typeof createRoulettes === 'function') createRoulettes();
 
 };
 
@@ -114,6 +120,7 @@ document.getElementById("addRouletteAdmin").onclick = function(){
         enabled: true
     });
     openAdmin();
+    if(typeof createRoulettes === 'function') createRoulettes();
 };
 
 document.getElementById("backAdmin").onclick = function(){
@@ -132,6 +139,7 @@ document.getElementById("saveButton").onclick = async function(){
     try {
         await window.saveToFirebase(roulettes);
         alert("Firebaseに保存しました！");
+        if(typeof createRoulettes === 'function') createRoulettes();
     } catch (error) {
         console.error("Firebase保存エラー", error);
         alert("Firebaseへの保存に失敗しました。コンソールを確認してください。");

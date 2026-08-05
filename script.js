@@ -14,7 +14,14 @@ async function loadData(){
 
     if(firebaseData){
 
-        roulettes = firebaseData;
+        // Firebase may store arrays as objects; normalize to array
+        if(Array.isArray(firebaseData)){
+            roulettes = firebaseData;
+        } else if(typeof firebaseData === 'object' && firebaseData !== null){
+            roulettes = Object.values(firebaseData);
+        } else {
+            roulettes = firebaseData;
+        }
 
     }else{
 
@@ -97,19 +104,21 @@ document.getElementById("addRoulette").onclick = () => {
 document.getElementById("spinButton").onclick=()=>{
 
 roulettes.forEach((r,index)=>{
+    try{
+        const checkbox = document.getElementById(`check${index}`);
+        if(!checkbox || !checkbox.checked) return;
+        if(!r || !Array.isArray(r.items) || r.items.length === 0) return;
 
-if(document.getElementById(`check${index}`).checked){
-
-const random=r.items[Math.floor(Math.random()*r.items.length)];
-
-document.getElementById(`result${index}`).textContent=random;
-
-}
-
+        const random = r.items[Math.floor(Math.random()*r.items.length)];
+        const resultEl = document.getElementById(`result${index}`);
+        if(resultEl) resultEl.textContent = random;
+    }catch(e){
+        console.error('spin error', e, r, index);
+    }
 });
 
 };
-const ADMIN_PASSWORD = "minekosi.@10";
+const ADMIN_PASSWORD = "minekosi.＠10";
 
 document.getElementById("adminButton").onclick = () => {
 
