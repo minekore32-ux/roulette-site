@@ -31,7 +31,15 @@ function normalizeRoulettes(data){
     return [];
 }
 
+function getDefaultRoulettes(){
+    return [{ name: 'ルーレット1', items: ['A','B','C','D'], enabled: true }];
+}
+
 export function createRoulettes(){
+    if(!container) return;
+    if(!Array.isArray(roulettes) || roulettes.length === 0){
+        roulettes = getDefaultRoulettes();
+    }
     container.innerHTML = '';
     roulettes.forEach((r,index)=>{
         const div = document.createElement('div');
@@ -47,15 +55,20 @@ export function createRoulettes(){
 
 export async function init(){
     // firebase.js must have been initialized in index.html
-    const data = await loadRoulette();
-    const normalized = normalizeRoulettes(data);
-    if(normalized.length > 0){
-        roulettes = normalized;
-    } else {
-        roulettes = [
-            { name: 'ルーレット1', items: ['A','B','C','D'], enabled:true }
-        ];
+    try{
+        const data = await loadRoulette();
+        const normalized = normalizeRoulettes(data);
+        if(normalized.length > 0){
+            roulettes = normalized;
+        }
+    }catch(error){
+        console.warn('ルーレットデータの読み込みに失敗したため、初期データを表示します。', error);
     }
+
+    if(!Array.isArray(roulettes) || roulettes.length === 0){
+        roulettes = getDefaultRoulettes();
+    }
+
     createRoulettes();
 
     document.getElementById('spinButton').addEventListener('click', ()=>{
@@ -79,7 +92,7 @@ export async function init(){
 
     // Expose for admin module
     window.getRoulettes = () => roulettes;
-    window.setRoulettes = (v)=>{ roulettes = v; createRoulettes(); };
+    window.setRoulettes = (v)=>{ roulettes = Array.isArray(v) && v.length > 0 ? v : getDefaultRoulettes(); createRoulettes(); };
     window.saveAndSync = async ()=>{ await saveRoulette(roulettes); };
     window.createRoulettes = createRoulettes;
 
