@@ -1,6 +1,13 @@
 // Firebase helper module (ES module)
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { getDatabase, ref, set, get, child } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
 // ここに Firebase コンソールから取得した値をコピーします。
@@ -19,10 +26,13 @@ const ADMIN_EMAILS = [ 'mineko.re32@gmail.com' ];
 
 let app, auth, db;
 
-export function initFirebase(){
+export async function initFirebase(){
     app = initializeApp(firebaseConfig);
     auth = getAuth(app);
     db = getDatabase(app);
+
+    // Firebase の認証状態をブラウザに永続化し、ログイン期限を「アプリ側」で切れにくくする
+    await setPersistence(auth, browserLocalPersistence);
 }
 
 export async function signIn(email,password){
